@@ -1,0 +1,159 @@
+/*****************************************************************************
+* Name:        Acacia Moran
+* Assignment:  Homework 5-14
+*****************************************************************************/
+
+*<--- TYPE CODE WITHIN THESE BOUNDS  ----  TYPE CODE WITHIN THESE BOUNDS --->;
+*1234567890123456789012345678901234567890123456789012345678901234567890123456;
+
+/****************************************************************************** 
+In the last lesson we learned about how to import a data set into SAS
+using instream data and the DATALINES statement. When we did this and
+in all of our previous exercises the data sets we created were stored
+in a temporary SAS library called WORK.
+
+SAS libraries are locations/folders on your computer that SAS uses
+to store SAS data sets. All of the data sets we've created so far have been 
+stored in the WORK library, which is temporary. Once the SAS session has ended, 
+these data sets cease to exist.
+
+For example, the test data set below is stored in the WORK library. 
+*****************************************************************************/
+
+data test;
+	do i=1 to 3;
+		x=i**2;
+		output;
+	end;
+run;
+
+
+/****************************************************************************** 
+An equivalent way of writing this data step is:
+*****************************************************************************/
+
+data work.test;
+	do i=1 to 3;
+		x=i**2;
+		output;
+	end;
+run;
+
+/****************************************************************************** 
+When you specify a data set, it takes the syntax:
+
+libraryname.datasetname
+
+The libraryname is understood to be WORK if ommitted.  So the
+following proc prints execute equivalently:
+*****************************************************************************/
+
+proc print data=test; run;
+proc print data=work.test; run;
+
+/****************************************************************************** 
+To access or save SAS data sets we need to create a new SAS library that directs
+SAS to the desired location.  We create the library with a libname statement
+(libname means library name!).  The general form of the libname statement is
+
+libname reference "path" ;
+
+where reference is a brief string stating the reference name (must be less
+than 8 characters), and path specifies the location on your computer.
+
+For example, I can create an SAS library called apple that points to the downloads 
+folder on my computer as follows:
+*****************************************************************************/
+
+libname apple "C:/Users/hglanz/Downloads/";
+
+/****************************************************************************** 
+If you are new to identifying paths/directories on your computer, an
+easy way to do so is to navigate/explore to the folder you are interested
+in using, then right click it, and select propoerties.  
+
+Note that paths in SAS 
+-are enclosed in quotations
+-contain forward slashes
+
+Now I can access any SAS data set in my Downloads folder, or save
+SAS data sets to my Downloads folder, by refering to the libary apple.
+
+To make my test data set a permanent SAS data set in my Downloads folder,
+I can simply change the library reference from work to apple.
+*****************************************************************************/
+
+data apple.test;
+	do i=1 to 3;
+		x=i**2;
+		output;
+	end;
+run;
+
+/****************************************************************************** 
+Wallah!  Now a permanent SAS data set called test has been saved to 
+my Downloads folder.
+
+Now what if I want to modify the content of an exisiting SAS data set?  To 
+import data from an existing SAS data we need to use a SET statement.
+
+Below, I am creating a new data set called test2 in my WORK library that contains 
+the contents of apple.test. I am also calculating a new variable y. 
+*****************************************************************************/
+
+data test2;
+	set apple.test;
+	y=i**3;
+run;
+
+proc print data=test2; run;
+
+
+/****************************************************************************** 
+Now on your own:  
+--Write your own libname statement.  Name the library reference tree (instead of 
+apple).  You may choose any folder/path on your computer.
+--Create a permanent SAS data set in the tree library that is called 
+check_LastnameFirstInitial (so mine would be check_GlanzH) that takes the
+square root of the numbers 1 to 3. 
+--When you submit this SAS script to PolyLearn, also upload your permanent
+SAS data set, which should have the .sas7bdat extension.
+*****************************************************************************/
+/* this creates the new folder*/
+
+libname mydata '/folders/myfolders/';
+
+/* this makes the data set go to the folder*/
+
+data mydata.check_MoranA;
+
+/* this creates a do loo for 1 to 3*/
+
+do i = 1 to 3;
+
+/* this takes the squareroot of each number*/
+
+	squareroot = sqrt(i);
+	
+	/* this output the number to the screen*/
+	
+	output;
+	
+/* this ends the do loop*/
+
+end;
+
+/* this runs the code*/
+
+run;
+
+/* this prints the data to a table*/
+
+proc print data = mydata.check_MoranA;
+
+/* this runs the proc step*/
+
+run;
+
+*<--- TYPE CODE WITHIN THESE BOUNDS  ----  TYPE CODE WITHIN THESE BOUNDS --->;
+*1234567890123456789012345678901234567890123456789012345678901234567890123456;
